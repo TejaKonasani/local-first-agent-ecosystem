@@ -4,9 +4,8 @@ import { api } from '../api.js'
 import {
   Kpi, Card, Alert, ApprovalsQueue, AuditTable, PageSkeleton,
 } from '../components/ui.jsx'
-import { useRevealGroup } from '../motion.js'
 import {
-  FileText, Cpu, CheckCircle, Users, Plus, User,
+  FileText, Cpu, CheckCircle, Users, Plus, User, AlertTriangle,
 } from '../components/icons.jsx'
 
 const ROLES = ['employee', 'manager', 'counsel', 'client', 'tenant', 'auditor', 'admin']
@@ -22,14 +21,14 @@ function UsersManager({ onDone }) {
   async function load() {
     try {
       const r = await api.adminUsers()
-      setUsers(r.users)
+      setUsers(r.users || [])
     } catch (e) {
       setErr(e.message)
     }
   }
+
   useEffect(() => {
     load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   async function toggle(u) {
@@ -42,22 +41,27 @@ function UsersManager({ onDone }) {
     }
   }
 
-  const userErr = touched.username && !form.username.trim() ? 'Username is required.' : null
-  const passErr = touched.password && !form.password.trim() ? 'Password is required.' : null
+  const userErr = touched.username && !form.username.trim()
+    ? 'Username is required to create a governed account.'
+    : null
+  const passErr = touched.password && form.password.length < 6
+    ? 'Password must be at least 6 characters.'
+    : null
 
   async function create(e) {
     e.preventDefault()
     setTouched({ username: true, password: true })
-    if (!form.username.trim() || !form.password.trim()) return
+    if (!form.username.trim() || form.password.length < 6) return
     setBusy(true)
     setErr(null)
     setOk(null)
     try {
       await api.adminCreateUser(form.username.trim(), form.password, form.role, form.display_name)
-      setOk(`User “${form.username.trim()}” created.`)
+      setOk(`User “${form.username.trim()}” created successfully.`)
       setForm({ username: '', password: '', role: 'employee', display_name: '' })
       setTouched({})
       await load()
+      if (onDone) onDone()
     } catch (e2) {
       setErr(e2.message)
     } finally {
@@ -69,8 +73,9 @@ function UsersManager({ onDone }) {
     <div>
       {err && <Alert kind="err" onDismiss={() => setErr(null)}>{err}</Alert>}
       {ok && <Alert kind="ok" onDismiss={() => setOk(null)}>{ok}</Alert>}
-      <div className="table-wrap">
-        <table className="data">
+
+      <div className="table-responsive">
+        <table className="portal-table">
           <thead>
             <tr>
               <th>User</th>
@@ -86,19 +91,19 @@ function UsersManager({ onDone }) {
               <tr key={u.username}>
                 <td>
                   <b>{u.username}</b>
-                  <div className="muted small">{u.display_name}</div>
+                  <div className="caption">{u.display_name}</div>
                 </td>
-                <td><span className="badge type">{u.role}</span></td>
+                <td><span className="badge badge-doc-type">{u.role}</span></td>
                 <td>{u.portal}</td>
-                <td><span className={`badge sens-${u.max_sensitivity}`}>{u.max_sensitivity}</span></td>
+                <td><span className={`badge badge-${u.max_sensitivity}`}>{u.max_sensitivity}</span></td>
                 <td>
-                  <span className={`badge ${u.enabled ? 'on' : 'off'}`}>
+                  <span className={`badge ${u.enabled ? 'badge-success' : 'badge-error'}`}>
                     <span className="dot" aria-hidden="true" />
                     {u.enabled ? 'enabled' : 'disabled'}
                   </span>
                 </td>
                 <td style={{ textAlign: 'right' }}>
-                  <button className="btn sm" onClick={() => toggle(u)}>
+                  <button className="btn btn-secondary btn-sm" onClick={() => toggle(u)}>
                     {u.enabled ? 'Disable' : 'Enable'}
                   </button>
                 </td>
@@ -110,39 +115,56 @@ function UsersManager({ onDone }) {
 
       <form
         onSubmit={create}
-        style={{ marginTop: 18, borderTop: '1px solid var(--line)', paddingTop: 16 }}
+        style={{ marginTop: 24, borderTop: '1px solid var(--border)', paddingTop: 20 }}
         noValidate
       >
-        <div style={{ fontWeight: 600, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Plus size={15} /> Create a new user
+        <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Plus size={18} /> <span>Create a new user</span>
         </div>
-        <div className="grid cols-4">
-          <div className="field">
-            <label htmlFor="new-username">Username</label>
+
+        <div className="grid-4" style={{ marginBottom: 16 }}>
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label htmlFor="new-username" className="form-label">Username</label>
             <input
               id="new-username"
+              className={`form-input ${userErr ? 'has-error' : ''}`}
               value={form.username}
               onChange={(e) => setForm({ ...form, username: e.target.value })}
-              className={userErr ? 'invalid' : ''}
+              onBlur={() => setTouched((t) => ({ ...t, username: true }))}
+              placeholder="e.g. employee2"
               aria-invalid={!!userErr}
             />
-            {userErr && <span className="field-error">{userErr}</span>}
+            {userErr && (
+              <div className="field-error-msg">
+                <AlertTriangle size={13} /> <span>{userErr}</span>
+              </div>
+            )}
           </div>
-          <div className="field">
-            <label htmlFor="new-password">Password</label>
+
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label htmlFor="new-password" className="form-label">Password</label>
             <input
               id="new-password"
+              type="password"
+              className={`form-input ${passErr ? 'has-error' : ''}`}
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
-              className={passErr ? 'invalid' : ''}
+              onBlur={() => setTouched((t) => ({ ...t, password: true }))}
+              placeholder="Min 6 characters"
               aria-invalid={!!passErr}
             />
-            {passErr && <span className="field-error">{passErr}</span>}
+            {passErr && (
+              <div className="field-error-msg">
+                <AlertTriangle size={13} /> <span>{passErr}</span>
+              </div>
+            )}
           </div>
-          <div className="field">
-            <label htmlFor="new-role">Role</label>
+
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label htmlFor="new-role" className="form-label">Role</label>
             <select
               id="new-role"
+              className="form-select"
               value={form.role}
               onChange={(e) => setForm({ ...form, role: e.target.value })}
             >
@@ -151,95 +173,105 @@ function UsersManager({ onDone }) {
               ))}
             </select>
           </div>
-          <div className="field">
-            <label htmlFor="new-name">Display name</label>
+
+          <div className="form-group" style={{ marginBottom: 0 }}>
+            <label htmlFor="new-name" className="form-label">Display name</label>
             <input
               id="new-name"
+              className="form-input"
               value={form.display_name}
               onChange={(e) => setForm({ ...form, display_name: e.target.value })}
+              placeholder="Full name"
             />
           </div>
         </div>
-        <div className="row end">
-          <button className="btn primary" disabled={busy}>
-            {busy ? <span className="spinner" /> : <User size={15} />}
-            {busy ? 'Creating…' : 'Create user'}
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <button className="btn btn-primary" disabled={busy} type="submit">
+            {busy ? <span className="spinner" /> : <User size={16} />}
+            <span>{busy ? 'Creating…' : 'Create user'}</span>
           </button>
         </div>
       </form>
     </div>
   )
 }
+
 export default function AdminPortal() {
   const { data, loading, error, reload } = usePortalData()
-  const ref = useRevealGroup()
+
+  useEffect(() => {
+    document.title = 'Admin Portal | Local-First Agents'
+  }, [])
+
   if (loading) return <PageSkeleton />
   if (error) return <Alert kind="err">{error}</Alert>
 
   const kpi = data.kpi || {}
   const learning = data.learning
+
   return (
-    <div ref={ref}>
-      <div className="grid cols-4">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      {/* 4.4 Stat cards */}
+      <div className="grid-4">
         <Kpi label="Documents" value={kpi.documents ?? 0} icon={FileText} />
         <Kpi label="Agents" value={kpi.agents ?? 0} icon={Cpu} />
         <Kpi label="Pending approvals" value={kpi.pending_approvals ?? 0} icon={CheckCircle} />
-        <Kpi label="Users" value={kpi.users ?? 0} icon={Users} accent />
+        <Kpi label="Active users" value={kpi.users ?? 0} icon={Users} accent />
       </div>
 
-      <div className="section-title reveal">User management</div>
-      <div className="reveal">
+      {/* User Management */}
+      <div>
+        <h3 style={{ marginBottom: 'var(--space-3)' }}>User management</h3>
         <Card>
           <UsersManager onDone={reload} />
         </Card>
       </div>
 
-      <div className="grid cols-2 mt-20">
-        <div className="reveal">
-          <Card title="AI agents" sub="The 16-agent orchestrator and their enabled state.">
-            <div className="table-wrap scrollbox">
-              <table className="data">
-                <thead>
-                  <tr>
-                    <th>Agent</th>
-                    <th style={{ textAlign: 'right' }}>State</th>
+      {/* Grid 2: AI Agents & Pending Approvals */}
+      <div className="grid-2">
+        <Card title="AI agents" sub="The governed 16-agent orchestrator hierarchy.">
+          <div className="table-responsive" style={{ maxHeight: 380, overflowY: 'auto' }}>
+            <table className="portal-table">
+              <thead>
+                <tr>
+                  <th>Agent</th>
+                  <th style={{ textAlign: 'right' }}>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(data.agents || []).map((a) => (
+                  <tr key={a.id}>
+                    <td>
+                      <b>{a.name}</b>
+                      <div className="caption mono-chip" style={{ display: 'inline-block', marginTop: 2 }}>{a.id}</div>
+                    </td>
+                    <td style={{ textAlign: 'right' }}>
+                      <span className={`badge ${a.enabled ? 'badge-success' : 'badge-error'}`}>
+                        <span className="dot" aria-hidden="true" />
+                        {a.enabled ? 'enabled' : 'disabled'}
+                      </span>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {(data.agents || []).map((a) => (
-                    <tr key={a.id}>
-                      <td>
-                        <b>{a.name}</b>
-                        <div className="muted small mono">{a.id}</div>
-                      </td>
-                      <td style={{ textAlign: 'right' }}>
-                        <span className={`badge ${a.enabled ? 'on' : 'off'}`}>
-                          <span className="dot" aria-hidden="true" />
-                          {a.enabled ? 'enabled' : 'disabled'}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Card>
-        </div>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
 
-        <div className="reveal" data-reveal-delay="0.08">
-          <Card title="Pending approvals" sub="Approve or reject gated actions.">
-            <ApprovalsQueue approvals={data.pending_approvals} onDecided={reload} />
-          </Card>
-        </div>
+        <Card title="Pending approvals" sub="Governed approvals queue for gated workflows.">
+          <ApprovalsQueue approvals={data.pending_approvals} onDecided={reload} />
+        </Card>
       </div>
 
-      <div className="section-title reveal">Self-learning engine</div>
-      <div className="reveal">
+      {/* Self-learning engine */}
+      <div>
+        <h3 style={{ marginBottom: 'var(--space-3)' }}>Self-learning engine</h3>
         <Card>
           {learning && learning.error ? (
-            <div className="muted">{learning.error}</div>
+            <div className="caption">{learning.error}</div>
           ) : learning ? (
-            <div className="grid cols-4">
+            <div className="grid-4">
               <Kpi label="Learning runs" value={learning.total_runs ?? 0} />
               <Kpi label="Promoted insights" value={learning.total_promoted ?? 0} accent />
               <Kpi
@@ -249,16 +281,15 @@ export default function AdminPortal() {
               <Kpi label="Budget / run" value={learning.budget_per_run ?? '—'} />
             </div>
           ) : (
-            <div className="muted">Learning engine not wired.</div>
+            <div className="caption">Self-learning orchestrator telemetry not currently active.</div>
           )}
         </Card>
       </div>
 
-      <div className="section-title reveal">Audit trail</div>
-      <div className="reveal">
-        <Card>
-          <AuditTable entries={data.recent_audit} limit={30} />
-        </Card>
+      {/* Audit trail */}
+      <div>
+        <h3 style={{ marginBottom: 'var(--space-3)' }}>System audit trail</h3>
+        <AuditTable entries={data.recent_audit} limit={8} />
       </div>
     </div>
   )

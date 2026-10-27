@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../auth.jsx'
 import { api } from '../api.js'
-import { useParallax } from '../motion.js'
 import {
   ShieldCheck, User, BarChart, Scale, Building, Home, Search, Shield,
-  Lock, Eye, EyeOff, ArrowRight, Check,
+  Eye, EyeOff, ArrowRight, Check, AlertTriangle,
 } from '../components/icons.jsx'
 
 const PORTAL_ICONS = {
@@ -21,7 +20,6 @@ const PORTAL_ICONS = {
 export default function Login() {
   const { login } = useAuth()
   const navigate = useNavigate()
-  const parallaxRef = useParallax()
   const [logins, setLogins] = useState([])
   const [sel, setSel] = useState(null)
   const [username, setUsername] = useState('')
@@ -31,11 +29,12 @@ export default function Login() {
   const [err, setErr] = useState(null)
 
   useEffect(() => {
+    document.title = 'Sign in | Local-First Agents'
     api
       .demo()
       .then((r) => {
-        setLogins(r.logins)
-        if (r.logins.length) {
+        setLogins(r.logins || [])
+        if (r.logins && r.logins.length > 0) {
           const first = r.logins[0]
           setSel(first.portal)
           setUsername(first.username)
@@ -43,11 +42,11 @@ export default function Login() {
         }
       })
       .catch(() => {
-        /* offline demo still works */
+        // Offline demo fallback still maintains operational credentials
       })
   }, [])
 
-  function pick(l) {
+  function pickRole(l) {
     setSel(l.portal)
     setUsername(l.username)
     setPassword(l.password)
@@ -70,145 +69,158 @@ export default function Login() {
   }
 
   return (
-    <div className="login-wrap" ref={parallaxRef}>
-      <div className="login-hero">
-        <div className="hero-grid" data-parallax="0.04" aria-hidden="true" />
-        <div className="hero-orb a" data-parallax="0.08" aria-hidden="true" />
-        <div className="hero-orb b" data-parallax="0.05" aria-hidden="true" />
+    <div className="login-split">
+      {/* 4.2 Left Panel: 5/12 navy #0E1A2B with subtle 48px grid */}
+      <div className="login-left">
+        <div className="login-grid-bg" aria-hidden="true" />
 
-        <div className="brand-lockup">
-          <span className="brand-mark" aria-hidden="true">
-            <ShieldCheck size={24} />
-          </span>
-          <div className="brand-text">
-            <div className="mark">Local-First Agent Ecosystem</div>
-            <div className="name">Legal &amp; Compliance Platform</div>
-          </div>
-        </div>
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <Link to="/" className="logo-brand">
+            <div className="logo-tile" aria-hidden="true">
+              <ShieldCheck size={20} />
+            </div>
+            <span className="logo-brand-text" style={{ color: '#FFFFFF' }}>
+              Local-First Agents
+            </span>
+          </Link>
 
-        <div>
-          <h2>
-            One governed platform.
-            <br />
-            <em>Seven role-based portals.</em>
+          <h2 className="login-left-headline">
+            One governed platform.<br />
+            Seven role-based portals.
           </h2>
-          <p>
-            A 16-agent legal &amp; compliance platform running on local Ollama inference —
-            with a sensitivity ladder, approval gates and a full audit trail.
+          <p className="login-left-subtext">
+            Enterprise legal and compliance workflows running privately on your local hardware.
+            Governed by 16 multi-agent orchestrators with built-in sensitivity ladders, approval gates,
+            and immutable audit trails.
           </p>
-          <div className="feats">
-            <div>
-              <span className="feat-ico" aria-hidden="true"><ShieldCheck /></span>
-              <span><b>Role-scoped access</b> — you only see what your role may see</span>
-            </div>
-            <div>
-              <span className="feat-ico" aria-hidden="true"><Check /></span>
-              <span><b>Approval gates</b> for drafts, external sharing and voice</span>
-            </div>
-            <div>
-              <span className="feat-ico" aria-hidden="true"><Lock /></span>
-              <span><b>Append-only audit trail</b> on every action</span>
-            </div>
-            <div>
-              <span className="feat-ico" aria-hidden="true"><Shield /></span>
-              <span><b>Local inference</b> — your data stays on your machine</span>
-            </div>
-          </div>
         </div>
 
-        <div className="foot">Demo build · demo credentials only · not for production use</div>
+        <div className="login-demo-note" style={{ position: 'relative', zIndex: 1 }}>
+          Demo evaluation build · In-memory state · Local privacy guaranteed
+        </div>
       </div>
 
-      <div className="login-body">
-        <div className="login-card">
-          <div className="head">
-            <h1>Sign in to your portal</h1>
-            <p>Pick a demo role to autofill, or enter credentials directly.</p>
-          </div>
+      {/* 4.2 Right Panel: 7/12 ivory with max-width 480px */}
+      <div className="login-right">
+        <div className="login-form-wrap" data-aos="fade-up">
+          <div className="eyebrow">SIGN IN</div>
+          <h2 style={{ marginBottom: 'var(--space-2)' }}>Choose your portal</h2>
+          <p className="caption" style={{ marginBottom: 'var(--space-5)' }}>
+            Select a demo portal below to autofill credentials, or enter custom account details.
+          </p>
 
+          {/* 7 Role Cards in 2-column grid */}
           {logins.length > 0 && (
-            <div className="portal-grid" role="group" aria-label="Demo roles">
+            <div className="role-grid-login" role="group" aria-label="Portal selection">
               {logins.map((l) => {
                 const Icon = PORTAL_ICONS[l.portal] || ShieldCheck
+                const isSelected = sel === l.portal
                 return (
                   <button
                     key={l.portal}
-                    className={'portal-tile' + (sel === l.portal ? ' sel' : '')}
-                    onClick={() => pick(l)}
                     type="button"
-                    aria-pressed={sel === l.portal}
+                    className={`role-card-btn ${isSelected ? 'selected' : ''}`}
+                    onClick={() => pickRole(l)}
+                    aria-pressed={isSelected}
                   >
-                    <div className="pt-name">
-                      <span className="pt-ico" aria-hidden="true">
-                        <Icon size={14} />
+                    <div className="role-card-name">
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                        <Icon size={16} />
+                        <span>{l.name}</span>
                       </span>
-                      {l.name}
+                      {isSelected && (
+                        <span className="check-icon" aria-hidden="true">
+                          <Check size={16} />
+                        </span>
+                      )}
                     </div>
-                    <div className="pt-cred">{l.username} · {l.password}</div>
+                    <div className="role-card-desc mono-chip">
+                      {l.username} · {l.password}
+                    </div>
                   </button>
                 )
               })}
             </div>
           )}
 
-          <form className="login-form" onSubmit={submit} noValidate>
-            <div className="creds-hint">
-              Demo login — e.g. <code>employee1 / employee123</code>. Click a role above to autofill.
-            </div>
-            <div className="field">
-              <label htmlFor="login-username">Username</label>
+          <form onSubmit={submit} noValidate>
+            <div className="form-group">
+              <label htmlFor="login-username" className="form-label">Username</label>
               <input
                 id="login-username"
+                className="form-input"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 autoComplete="username"
-                placeholder="username"
+                placeholder="Username"
+                required
               />
             </div>
-            <div className="field">
-              <label htmlFor="login-password">Password</label>
+
+            <div className="form-group">
+              <label htmlFor="login-password" className="form-label">Password</label>
               <div style={{ position: 'relative' }}>
                 <input
                   id="login-password"
+                  className="form-input"
                   type={showPw ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
-                  placeholder="password"
-                  style={{ paddingRight: 44 }}
+                  placeholder="Password"
+                  style={{ paddingRight: 48 }}
+                  required
                 />
                 <button
                   type="button"
+                  className="pw-toggle-btn"
                   onClick={() => setShowPw((s) => !s)}
                   aria-label={showPw ? 'Hide password' : 'Show password'}
-                  style={{
-                    position: 'absolute',
-                    right: 8,
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    color: 'var(--text-faint)',
-                    padding: 6,
-                    display: 'grid',
-                    placeItems: 'center',
-                    borderRadius: 6,
-                  }}
                 >
-                  {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPw ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
+
             {err && (
-              <div className="alert err" role="alert">
-                <span className="alert-msg">{err}</span>
+              <div
+                role="alert"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  backgroundColor: 'var(--status-error-bg)',
+                  color: 'var(--status-error-text)',
+                  border: '1px solid var(--status-error-border)',
+                  borderRadius: 'var(--r-md)',
+                  padding: '10px 14px',
+                  fontSize: 13,
+                  marginBottom: 'var(--space-4)',
+                }}
+              >
+                <AlertTriangle size={16} style={{ color: 'var(--status-error-border)', flexShrink: 0 }} />
+                <span>{err}</span>
               </div>
             )}
-            <button className="btn primary block" disabled={busy} type="submit">
-              {busy ? <span className="spinner" /> : <ArrowRight size={15} />}
-              {busy ? 'Signing in…' : 'Sign in'}
+
+            <button
+              className="btn btn-primary btn-lg"
+              style={{ width: '100%', marginBottom: 'var(--space-4)' }}
+              disabled={busy || !username || !password}
+              type="submit"
+            >
+              {busy ? <span className="spinner" /> : <ArrowRight size={18} />}
+              <span>{busy ? 'Signing in…' : 'Sign in'}</span>
             </button>
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 14 }}>
+              <Link to="/forgot-password" style={{ color: 'var(--link-text)' }}>
+                Forgot your password?
+              </Link>
+              <Link to="/signup" style={{ color: 'var(--link-text)' }}>
+                Create account
+              </Link>
+            </div>
           </form>
         </div>
       </div>

@@ -1,49 +1,64 @@
+import { useEffect } from 'react'
 import { usePortalData } from '../hooks.js'
-import { Kpi, Card, DocTable, AiPanel, Alert, PageSkeleton, TypeBadge, SensBadge, fmtDate } from '../components/ui.jsx'
-import { useRevealGroup } from '../motion.js'
+import {
+  Kpi, Card, DocTable, AiPanel, Alert, PageSkeleton, TypeBadge, SensBadge, fmtDate,
+} from '../components/ui.jsx'
 import { Briefcase, FileText, BookOpen } from '../components/icons.jsx'
 
 const HALF_COLS = [
   { key: 'title', label: 'Title' },
   { key: 'doc_type', label: 'Type', render: (v) => <TypeBadge t={v} /> },
   { key: 'sensitivity', label: 'Sensitivity', render: (v) => <SensBadge s={v} /> },
-  { key: 'updated_at', label: 'Updated', render: (v) => <span className="muted nowrap">{fmtDate(v)}</span> },
+  { key: 'updated_at', label: 'Updated', render: (v) => <span className="caption">{fmtDate(v)}</span> },
 ]
 
 export default function CounselPortal() {
   const { data, loading, error } = usePortalData()
-  const ref = useRevealGroup()
+
+  useEffect(() => {
+    document.title = 'External Counsel Portal | Local-First Agents'
+  }, [])
+
   if (loading) return <PageSkeleton />
   if (error) return <Alert kind="err">{error}</Alert>
 
   const c = data.counts || {}
+
   return (
-    <div ref={ref}>
-      <div className="grid cols-3">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      {/* Stat cards */}
+      <div className="grid-3">
         <Kpi label="Assigned cases" value={c.cases ?? 0} icon={Briefcase} accent />
         <Kpi label="Drafts to review" value={c.drafts ?? 0} icon={FileText} />
         <Kpi label="Research items" value={data.research?.length ?? 0} icon={BookOpen} />
       </div>
 
-      <div className="section-title reveal">AI-assisted tasks</div>
-      <div className="reveal"><AiPanel prompts={data.ai_tasks} /></div>
+      {/* AI Assistant */}
+      <AiPanel prompts={data.ai_tasks} />
 
-      <div className="section-title reveal">My assigned cases</div>
-      <div className="reveal"><Card><DocTable docs={data.cases} empty="No cases assigned to you." /></Card></div>
+      {/* My assigned cases */}
+      <div>
+        <h3 style={{ marginBottom: 'var(--space-3)' }}>My assigned cases</h3>
+        <DocTable docs={data.cases} empty="No cases currently assigned to counsel." />
+      </div>
 
-      <div className="grid cols-2 mt-20">
-        <div className="reveal">
-          <div className="section-title">Drafts awaiting your review</div>
-          <Card><DocTable docs={data.drafts_to_review} columns={HALF_COLS} empty="No drafts to review." /></Card>
+      {/* Grid 2: Drafts & Research */}
+      <div className="grid-2">
+        <div>
+          <h3 style={{ marginBottom: 'var(--space-3)' }}>Drafts awaiting review</h3>
+          <DocTable docs={data.drafts_to_review} columns={HALF_COLS} empty="No drafts awaiting review." />
         </div>
-        <div className="reveal" data-reveal-delay="0.08">
-          <div className="section-title">Legal research</div>
-          <Card><DocTable docs={data.research} columns={HALF_COLS} empty="No research items." /></Card>
+        <div>
+          <h3 style={{ marginBottom: 'var(--space-3)' }}>Legal research</h3>
+          <DocTable docs={data.research} columns={HALF_COLS} empty="No research items shared." />
         </div>
       </div>
 
-      <div className="section-title reveal">All documents in scope</div>
-      <div className="reveal"><Card><DocTable docs={data.documents} empty="No documents in your scope." /></Card></div>
+      {/* All documents in scope */}
+      <div>
+        <h3 style={{ marginBottom: 'var(--space-3)' }}>All documents in scope</h3>
+        <DocTable docs={data.documents} empty="No documents within counsel scope." />
+      </div>
     </div>
   )
 }

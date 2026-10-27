@@ -1,8 +1,9 @@
 /**
- * Consistent icon set — 24x24 viewBox, 2px stroke, round caps/joins.
- * One style everywhere: same stroke, same size, same line weight.
+ * Consistent Lucide-style icon set:
+ * 24x24 grid, 1.75px stroke, rounded caps and joins, inline SVG.
+ * aria-hidden="true" by default unless overridden.
  */
-function I({ children, size = 18, ...rest }) {
+function I({ children, size = 18, strokeWidth = 1.75, ...rest }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -11,7 +12,7 @@ function I({ children, size = 18, ...rest }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -338,41 +339,10 @@ export const Activity = (p) => (
   </I>
 )
 
-export const Layers = (p) => (
-  <I {...p}>
-    <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" />
-    <path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" />
-    <path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65" />
-  </I>
-)
-
-export const Database = (p) => (
-  <I {...p}>
-    <ellipse cx="12" cy="5" rx="9" ry="3" />
-    <path d="M3 5V19A9 3 0 0 0 21 19V5" />
-    <path d="M3 12A9 3 0 0 0 21 12" />
-  </I>
-)
-
-export const GraduationCap = (p) => (
-  <I {...p}>
-    <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" />
-    <path d="M22 10v6" />
-    <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
-  </I>
-)
-
 export const MapPin = (p) => (
   <I {...p}>
     <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
     <circle cx="12" cy="10" r="3" />
-  </I>
-)
-
-export const Wallet = (p) => (
-  <I {...p}>
-    <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" />
-    <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" />
   </I>
 )
 
@@ -381,5 +351,17 @@ export const Percent = (p) => (
     <line x1="19" x2="5" y1="5" y2="19" />
     <circle cx="6.5" cy="6.5" r="2.5" />
     <circle cx="17.5" cy="17.5" r="2.5" />
+  </I>
+)
+
+export const WifiOff = (p) => (
+  <I {...p}>
+    <line x1="2" x2="22" y1="2" y2="22" />
+    <path d="M8.5 16.5a5 5 0 0 1 7 0" />
+    <path d="M2 8.82a15 15 0 0 1 4.17-2.65" />
+    <path d="M10.66 5c4.01-.36 8.14.9 11.34 3.76" />
+    <path d="M16.85 11.25a10 10 0 0 1 2.22 1.68" />
+    <path d="M5 13a10 10 0 0 1 5.24-2.58" />
+    <line x1="12" x2="12.01" y1="20" y2="20" />
   </I>
 )
