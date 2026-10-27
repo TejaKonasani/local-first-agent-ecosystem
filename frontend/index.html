@@ -3,8 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Local-First Agent Ecosystem — Multi-Portal</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9B%91%EF%B8%8F%3C/text%3E%3C/svg%3E" />
+    <meta
+      name="description"
+      content="Local-First Agent Ecosystem — a 16-agent legal & compliance platform that runs entirely on your own hardware. Seven role-based portals, approval gates and a full audit trail."
+    />
+    <meta name="theme-color" content="#0F1B30" />
+    <title>Local-First Agent Ecosystem</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F1B30'/%3E%3Cpath d='M32 11l17 6.2v12.3c0 10.9-7.2 19.3-17 22.5-9.8-3.2-17-11.6-17-22.5V17.2L32 11z' fill='none' stroke='%23C29A3B' stroke-width='3.6' stroke-linejoin='round'/%3E%3Cpath d='M24.5 32.5l5.2 5.2 10-11' fill='none' stroke='%23C29A3B' stroke-width='3.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+    />
+    <script>
+      // Apply the saved (or system) theme before first paint to avoid a flash.
+      (function () {
+        try {
+          var t = localStorage.getItem('lfae_theme');
+          if (t !== 'light' && t !== 'dark') {
+            t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
