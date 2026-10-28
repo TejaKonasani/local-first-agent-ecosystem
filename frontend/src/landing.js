@@ -3,13 +3,13 @@
 import { initCommonUI, icons, prefersReducedMotion } from './app.js'
 
 const PRACTICE_AREAS = [
-  'Tax',
-  'Legal',
-  'Litigation',
-  'Corporate',
-  'Property',
-  'Projects',
-  'Compliance',
+  { name: 'Tax', iconSvg: icons.receipt || icons.fileText },
+  { name: 'Legal', iconSvg: icons.scale },
+  { name: 'Litigation', iconSvg: icons.gavel || icons.scale },
+  { name: 'Corporate', iconSvg: icons.building },
+  { name: 'Property', iconSvg: icons.home },
+  { name: 'Projects', iconSvg: icons.barChart },
+  { name: 'Compliance', iconSvg: icons.shieldCheck || icons.shield },
 ]
 
 export function initLandingPage() {
@@ -39,9 +39,12 @@ function setupOrbit() {
         <a
           href="#practice-areas"
           class="orbit-pill"
-          aria-label="Practice area: ${area}"
+          aria-label="Practice area: ${area.name}"
         >
-          <span>${area}</span>
+          <span class="orbit-pill-icon" style="display:inline-flex; align-items:center; justify-content:center; width:15px; height:15px; margin-right:7px; color:var(--lk); flex-shrink:0;">
+            ${area.iconSvg}
+          </span>
+          <span>${area.name}</span>
         </a>
       </div>
     `

@@ -33,6 +33,11 @@ export function clearSession() {
   sessionStorage.removeItem('nushift_role')
 }
 
+// Base URL resolution: if frontend is served on a different port (e.g. 8080), route to backend on 8000
+const API_BASE = (typeof window !== 'undefined' && window.location.port && window.location.port !== '8000' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
+  ? (window.__API_BASE__ || 'http://127.0.0.1:8000')
+  : ''
+
 async function request(path, { method = 'GET', body, isForm = false } = {}) {
   const headers = {}
   const token = getToken()
@@ -44,7 +49,8 @@ async function request(path, { method = 'GET', body, isForm = false } = {}) {
     headers['Content-Type'] = 'application/json'
     payload = JSON.stringify(body)
   }
-  const res = await fetch(path, { method, headers, body: payload })
+  const url = (path.startsWith('http') || !API_BASE) ? path : (API_BASE + path)
+  const res = await fetch(url, { method, headers, body: payload })
   let data = null
   const text = await res.text()
   if (text) {

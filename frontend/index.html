@@ -52,12 +52,7 @@
         }
 
         try {
-          var t = localStorage.getItem('nushift_theme') || localStorage.getItem('lfae_theme');
-          if (t !== 'light' && t !== 'dark') {
-            t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-              ? 'dark'
-              : 'light';
-          }
+          var t = localStorage.getItem('nushift_theme') || localStorage.getItem('meridian_theme') || 'dark';
           document.documentElement.setAttribute('data-theme', t);
         } catch (e) {
           document.documentElement.setAttribute('data-theme', 'dark');
@@ -65,7 +60,7 @@
       })();
     </script>
 
-    <link rel="stylesheet" href="/src/styles.css" />
+    <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -112,230 +107,139 @@
       </div>
 
       <!-- Mobile Dropdown Panel -->
-      <div id="mobile-nav-panel" class="mobile-nav-panel" role="region" aria-label="Mobile Navigation">
-        <a href="#platform" class="nav-link">Platform</a>
-        <a href="#agents" class="nav-link">Agents</a>
-        <a href="#portals" class="nav-link">Roles</a>
-        <a href="#security" class="nav-link">Security</a>
-        <a href="roles.html" class="btn btn-primary" style="width: 100%; margin-top: 8px;">Open your portal</a>
+      <div id="mobile-nav-panel" class="mobile-nav-panel" aria-label="Mobile Navigation">
+        <ul class="mobile-nav-links">
+          <li><a href="#platform" class="nav-link">Platform</a></li>
+          <li><a href="#agents" class="nav-link">Agents</a></li>
+          <li><a href="#portals" class="nav-link">Roles</a></li>
+          <li><a href="#security" class="nav-link">Security</a></li>
+          <li style="margin-top: 16px;">
+            <a href="roles.html" class="btn btn-primary" style="width: 100%;">
+              Open your portal
+            </a>
+          </li>
+        </ul>
       </div>
     </header>
 
+    <!-- Main Content -->
     <main id="main-content">
       <!-- 5.1 Hero Section -->
-      <section id="platform" style="text-align: center; padding: 72px 24px 48px; max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 28px;">
-        <!-- Pill: 16 AI agents -->
-        <div class="glass-card hero-fade-item" style="padding: 6px 18px; border-radius: var(--r-pill); font-size: 13px; font-weight: 500; color: var(--fg); display: inline-flex; align-items: center; gap: 8px;">
-          <span class="badge" style="background: var(--role-alpha-20); color: var(--role); padding: 2px 8px; font-size: 11px;">Local-First</span>
-          <span>16 AI agents. Runs on your own machine.</span>
+      <section class="hero-section" id="platform" style="text-align: center; max-width: 960px; margin: 0 auto; padding: 64px 24px 32px;">
+        <!-- Eyebrow Tracking matching Image 5 -->
+        <div class="hero-eyebrow-track" style="font-size: 12px; font-weight: 700; letter-spacing: 0.18em; color: var(--mu); text-transform: uppercase; margin-bottom: 20px;">
+          LAW &bull; TAX &bull; COMPLIANCE &bull; PROPERTY &bull; CORPORATE
         </div>
 
-        <!-- H1 Hero with GSAP text reveal -->
-        <h1 class="h1-hero hero-h1-reveal">
-          Law, tax and compliance, shifted into one intelligent workspace.
+        <!-- H1 Headline with GSAP Reveal & Cyan Gradient Span -->
+        <h1 class="hero-h1 hero-h1-reveal" style="font-size: 52px; font-weight: 700; line-height: 1.15; margin: 0 auto 20px; max-width: 820px; letter-spacing: -0.02em; font-family: var(--font-heading); color: var(--fg);">
+          All your legal, tax and compliance<br />work in one <span style="background: linear-gradient(135deg, #22D3EE 0%, #8B7BFF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">intelligent workspace</span>
         </h1>
 
         <!-- Subtext -->
-        <p class="hero-subtext hero-fade-item">
-          Every role gets its own portal. Every draft waits for approval. Every action is recorded.
+        <p class="hero-subtext hero-fade-item" style="font-size: 18px; line-height: 1.6; color: var(--mu); max-width: 680px; margin: 0 auto 32px;">
+          A unified platform that brings together people, data and AI agents to help you manage cases, transactions, filings and compliance with clarity and control.
         </p>
 
-        <!-- CTA Buttons -->
-        <div class="hero-fade-item" style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
-          <a href="roles.html" class="btn btn-primary btn-lg">
+        <!-- CTA Button (Single Primary Button matching Image 5) -->
+        <div class="hero-cta-group hero-fade-item" style="display: flex; justify-content: center; margin-bottom: 40px;">
+          <a href="roles.html" class="btn btn-primary btn-lg" id="btn-hero-portal" style="border-radius: var(--r-pill); padding: 14px 28px; font-size: 15px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
             <span>Open your portal</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </a>
-          <a href="#agents" class="btn btn-ghost btn-lg">
-            <span>Watch it work</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
         </div>
 
-        <!-- 5.1 Rotating Orbit: Signature Element (560x560px) -->
-        <div class="orbit-stage" aria-label="Interactive practice areas orbit">
-          <!-- Center Glowing Core -->
-          <div class="orbit-core">
-            <span>Nushift</span>
-          </div>
-
-          <!-- Two Rings -->
+        <!-- Signature Rotating Orbit Element (560px Desktop) -->
+        <div class="orbit-stage" aria-label="Nushift practice areas orbit">
+          <!-- Outer and Inner Rings -->
           <div class="orbit-ring-outer"></div>
           <div class="orbit-ring-inner"></div>
 
-          <!-- Rotating Group with Seven Practice Area Pills -->
+          <!-- Rotating Group for 7 Practice Area Pills -->
           <div id="orbit-ring-group" class="orbit-ring-group">
-            <!-- Dynamically placed by landing.js -->
+            <!-- Populated dynamically via landing.js with counter-rotating pills -->
+          </div>
+
+          <!-- Center Glowing Nushift Core Orb -->
+          <div class="orbit-core" aria-label="Nushift central intelligence core">
+            <span>Nushift</span>
           </div>
         </div>
       </section>
 
-      <!-- Bento Grid Feature Row -->
-      <section style="max-width: var(--container-max); margin: 64px auto 96px; padding: 0 32px;" class="scroll-reveal-section">
-        <div class="bento-grid">
-          <!-- Card 1: Span 6 -->
-          <div class="bento-col-6 glass-card card-spotlight tilt-card card-pad-lg">
-            <div class="icon-tile icon-tile-44" style="margin-bottom: 20px; --role: var(--a1);" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <!-- 5.2 Bento Grid: Why Local Multi-Agent Architecture -->
+      <section id="portals" style="max-width: var(--container-max); margin: 96px auto 0; padding: 0 32px;" class="scroll-reveal-section">
+        <div
+          class="bento-grid"
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+          "
+        >
+          <!-- Bento 1 -->
+          <div class="glass-card card-spotlight" style="padding: 32px; border-radius: var(--r-20);">
+            <div class="icon-tile icon-tile-44" style="--role: #60A5FA; margin-bottom: 20px;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
-            <h3 style="font-size: 26px; margin-bottom: 12px;">Role-scoped by design</h3>
-            <p class="text-small" style="font-size: 15px; max-width: 45ch; margin-bottom: 24px;">
-              Every role only sees the documents, sensitivity levels, and assigned matters permitted by their cryptographic key.
+            <h3 style="font-size: 22px; margin-bottom: 8px;">Role-based access</h3>
+            <p class="text-small">
+              The right information for the right people with complete privilege isolation.
             </p>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <span class="badge badge-public"><span class="dot"></span>Public</span>
-              <span class="badge badge-internal"><span class="dot"></span>Internal</span>
-              <span class="badge badge-confidential"><span class="dot"></span>Confidential</span>
-              <span class="badge badge-restricted"><span class="dot"></span>Restricted</span>
-            </div>
           </div>
 
-          <!-- Card 2: Span 3 -->
-          <div class="bento-col-3 glass-card card-spotlight tilt-card card-pad-lg">
-            <div class="icon-tile icon-tile-44" style="margin-bottom: 20px; --role: #F59E0B;" aria-hidden="true">
+          <!-- Bento 2 -->
+          <div class="glass-card card-spotlight" style="padding: 32px; border-radius: var(--r-20);">
+            <div class="icon-tile icon-tile-44" style="--role: #F59E0B; margin-bottom: 20px;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <h3 style="font-size: 22px; margin-bottom: 8px;">Intelligent workflows</h3>
+            <p class="text-small">
+              AI agents assist with research, drafting, review and tracking.
+            </p>
+          </div>
+
+          <!-- Bento 3 -->
+          <div class="glass-card card-spotlight" style="padding: 32px; border-radius: var(--r-20);">
+            <div class="icon-tile icon-tile-44" style="--role: #34D399; margin-bottom: 20px;">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
             </div>
-            <h3 style="font-size: 22px; margin-bottom: 12px;">Approval gates</h3>
-            <p class="text-small" style="font-size: 14px;">
-              High-consequence drafts pause for human review before client dissemination or filing.
-            </p>
-          </div>
-
-          <!-- Card 3: Span 3 -->
-          <div class="bento-col-3 glass-card card-spotlight tilt-card card-pad-lg">
-            <div class="icon-tile icon-tile-44" style="margin-bottom: 20px; --role: #22D3EE;" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
-            </div>
-            <h3 style="font-size: 22px; margin-bottom: 12px;">Local inference</h3>
-            <p class="text-small" style="font-size: 14px;">
-              Runs on your private hardware via Ollama. Confidential client briefs never leave the building.
+            <h3 style="font-size: 22px; margin-bottom: 8px;">Secure and compliant</h3>
+            <p class="text-small">
+              Your data remains private with enterprise-grade security.
             </p>
           </div>
         </div>
       </section>
 
-      <!-- Section: Seven Portals -->
-      <section id="portals" style="max-width: var(--container-max); margin: 96px auto; padding: 0 32px;" class="scroll-reveal-section">
+      <!-- 5.3 How It Works: Four Step Process -->
+      <section id="how-it-works" style="max-width: var(--container-max); margin: 96px auto 0; padding: 0 32px;" class="scroll-reveal-section">
         <div style="text-align: center; margin-bottom: 48px;">
-          <span class="eyebrow" style="margin-bottom: 12px; display: inline-block;">TAILORED WORKSPACES</span>
-          <h2 class="h2-title">Seven portals for seven key responsibilities</h2>
-          <p class="text-small" style="font-size: 16px; margin: 8px auto 0;">Click any portal to explore its dedicated workspace and role-specific workflows.</p>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px;">
-          <!-- Employee -->
-          <a href="roles.html" class="glass-card card-spotlight glass-card-interactive" data-role="employee" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
-            <div class="icon-tile icon-tile-44">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            </div>
-            <div>
-              <h3 style="font-size: 19px; margin-bottom: 6px;">Internal Employee</h3>
-              <p class="text-small">Cases, tax and legal work</p>
-            </div>
-            <div style="font-size: 14px; font-weight: 600; color: var(--lk);">Open portal →</div>
-          </a>
-
-          <!-- Management -->
-          <a href="roles.html" class="glass-card card-spotlight glass-card-interactive" data-role="management" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
-            <div class="icon-tile icon-tile-44">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg>
-            </div>
-            <div>
-              <h3 style="font-size: 19px; margin-bottom: 6px;">Management</h3>
-              <p class="text-small">Firm-wide oversight</p>
-            </div>
-            <div style="font-size: 14px; font-weight: 600; color: var(--lk);">Open portal →</div>
-          </a>
-
-          <!-- Advocate -->
-          <a href="roles.html" class="glass-card card-spotlight glass-card-interactive" data-role="advocate" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
-            <div class="icon-tile icon-tile-44">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
-            </div>
-            <div>
-              <h3 style="font-size: 19px; margin-bottom: 6px;">Advocate</h3>
-              <p class="text-small">External counsel matters</p>
-            </div>
-            <div style="font-size: 14px; font-weight: 600; color: var(--lk);">Open portal →</div>
-          </a>
-
-          <!-- Client -->
-          <a href="roles.html" class="glass-card card-spotlight glass-card-interactive" data-role="client" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
-            <div class="icon-tile icon-tile-44">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/></svg>
-            </div>
-            <div>
-              <h3 style="font-size: 19px; margin-bottom: 6px;">Client</h3>
-              <p class="text-small">Your matter and documents</p>
-            </div>
-            <div style="font-size: 14px; font-weight: 600; color: var(--lk);">Open portal →</div>
-          </a>
-
-          <!-- Tenant -->
-          <a href="roles.html" class="glass-card card-spotlight glass-card-interactive" data-role="tenant" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
-            <div class="icon-tile icon-tile-44">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-            </div>
-            <div>
-              <h3 style="font-size: 19px; margin-bottom: 6px;">Tenant or Buyer</h3>
-              <p class="text-small">Property and vendor tasks</p>
-            </div>
-            <div style="font-size: 14px; font-weight: 600; color: var(--lk);">Open portal →</div>
-          </a>
-
-          <!-- Auditor -->
-          <a href="roles.html" class="glass-card card-spotlight glass-card-interactive" data-role="auditor" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
-            <div class="icon-tile icon-tile-44">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            </div>
-            <div>
-              <h3 style="font-size: 19px; margin-bottom: 6px;">Auditor</h3>
-              <p class="text-small">Read-only audit review</p>
-            </div>
-            <div style="font-size: 14px; font-weight: 600; color: var(--lk);">Open portal →</div>
-          </a>
-
-          <!-- Admin -->
-          <a href="roles.html" class="glass-card card-spotlight glass-card-interactive" data-role="admin" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
-            <div class="icon-tile icon-tile-44">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
-            </div>
-            <div>
-              <h3 style="font-size: 19px; margin-bottom: 6px;">Administrator</h3>
-              <p class="text-small">Users and system control</p>
-            </div>
-            <div style="font-size: 14px; font-weight: 600; color: var(--lk);">Open portal →</div>
-          </a>
-        </div>
-      </section>
-
-      <!-- Section: How an action is governed (4-step timeline: Ask, Draft, Approve, Record) -->
-      <section id="security" style="max-width: var(--container-max); margin: 96px auto; padding: 0 32px;" class="scroll-reveal-section">
-        <div style="text-align: center; margin-bottom: 48px;">
-          <span class="eyebrow" style="margin-bottom: 12px; display: inline-block;">GOVERNANCE PIPELINE</span>
-          <h2 class="h2-title">How an action is governed</h2>
-          <p class="text-small" style="font-size: 16px; margin: 8px auto 0;">Four deterministic checkpoints enforce rigorous legal compliance.</p>
+          <span class="eyebrow">HOW NUSHIFT OPERATES</span>
+          <h2 class="h2-title" style="margin-top: 8px;">Autonomous agents. Human decision.</h2>
+          <p class="hero-subtext">A clean pipeline ensuring maximum rigor and confidentiality.</p>
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px;">
-          <div class="glass-card card-pad-sm" style="display: flex; flex-direction: column; gap: 12px;">
+          <div class="glass-card" style="padding: 24px; display: flex; flex-direction: column; gap: 12px;">
             <div class="icon-tile icon-tile-44" style="--role: #60A5FA;">1</div>
-            <h3 style="font-size: 20px;">Ask</h3>
-            <p class="text-small">A practitioner or client submits an inquiry or task request via their role workspace.</p>
+            <h3 style="font-size: 20px;">Intake</h3>
+            <p class="text-small">Documents ingest with automated sensitivity tags (Client Confidential, Court Record, Internal Draft).</p>
           </div>
 
-          <div class="glass-card card-pad-sm" style="display: flex; flex-direction: column; gap: 12px;">
-            <div class="icon-tile icon-tile-44" style="--role: #F472B6;">2</div>
-            <h3 style="font-size: 20px;">Draft</h3>
-            <p class="text-small">16 specialized agents research statutes, compare precedents, and compose candidate filings.</p>
+          <div class="glass-card" style="padding: 24px; display: flex; flex-direction: column; gap: 12px;">
+            <div class="icon-tile icon-tile-44" style="--role: #22D3EE;">2</div>
+            <h3 style="font-size: 20px;">Orchestrate</h3>
+            <p class="text-small">16 specialized agents extract covenants, cross-reference statute, draft replies, and track statutory hearings.</p>
           </div>
 
-          <div class="glass-card card-pad-sm" style="display: flex; flex-direction: column; gap: 12px;">
+          <div class="glass-card" style="padding: 24px; display: flex; flex-direction: column; gap: 12px;">
             <div class="icon-tile icon-tile-44" style="--role: #F59E0B;">3</div>
-            <h3 style="font-size: 20px;">Approve</h3>
-            <p class="text-small">Every draft waits in an executive queue for counsel validation and cryptographic sign-off.</p>
+            <h3 style="font-size: 20px;">Verify</h3>
+            <p class="text-small">Qualified attorneys and accountants review diffs, approve citations, and release authorized documents.</p>
           </div>
 
-          <div class="glass-card card-pad-sm" style="display: flex; flex-direction: column; gap: 12px;">
+          <div class="glass-card" style="padding: 24px; display: flex; flex-direction: column; gap: 12px;">
             <div class="icon-tile icon-tile-44" style="--role: #34D399;">4</div>
             <h3 style="font-size: 20px;">Record</h3>
             <p class="text-small">The immutable audit log stamps every action, actor, timestamp, and verification hash.</p>
@@ -361,7 +265,7 @@
             <span class="marquee-chip">Intellectual Property Rights</span>
             <span class="marquee-chip">Contract Lifecycle Governance</span>
           </div>
-          <!-- Duplicated for seamless loop (aria-hidden) -->
+          <!-- Duplicated for seamless loop -->
           <div class="marquee-content" aria-hidden="true">
             <span class="marquee-chip">Tax Assessment &amp; Planning</span>
             <span class="marquee-chip">Litigation &amp; Dispute Resolution</span>
@@ -376,7 +280,7 @@
       </section>
 
       <!-- Final Call-to-Action Band -->
-      <section id="agents" style="max-width: 1000px; margin: 96px auto; padding: 0 32px;" class="scroll-reveal-section">
+      <section id="security" style="max-width: 1000px; margin: 96px auto; padding: 0 32px;" class="scroll-reveal-section">
         <div class="glass-card card-spotlight" style="padding: 64px 32px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 24px; box-shadow: var(--shadow-md);">
           <span class="eyebrow">GET STARTED TODAY</span>
           <h2 class="h2-title">Shift your practice into the intelligent era</h2>
@@ -403,7 +307,7 @@
           <a href="#agents" style="transition: color 150ms ease;">Agents</a>
           <a href="#portals" style="transition: color 150ms ease;">Roles</a>
           <a href="#security" style="transition: color 150ms ease;">Security</a>
-          <a href="mailto:admin@firm.internal" style="transition: color 150ms ease;">admin@firm.internal</a>
+          <a href="mailto:admin@nushift.internal" style="transition: color 150ms ease;">admin@nushift.internal</a>
         </div>
       </div>
       <div style="font-size: 13px; color: var(--mu); text-align: center; padding-top: 16px; border-top: 1px solid var(--bd);">
@@ -411,6 +315,6 @@
       </div>
     </footer>
 
-    <script type="module" src="/src/landing.js"></script>
+    <script type="module" src="./src/landing.js"></script>
   </body>
 </html>

@@ -27,16 +27,11 @@
     <!-- GSAP 3.12 CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 
-    <!-- Pre-paint Theme Script (prevents theme flash) -->
+    <!-- Pre-paint Theme Script -->
     <script>
       (function () {
         try {
-          var t = localStorage.getItem('nushift_theme') || localStorage.getItem('lfae_theme');
-          if (t !== 'light' && t !== 'dark') {
-            t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-              ? 'dark'
-              : 'light';
-          }
+          var t = localStorage.getItem('nushift_theme') || localStorage.getItem('meridian_theme') || 'dark';
           document.documentElement.setAttribute('data-theme', t);
         } catch (e) {
           document.documentElement.setAttribute('data-theme', 'dark');
@@ -44,12 +39,12 @@
       })();
     </script>
 
-    <link rel="stylesheet" href="/src/styles.css" />
+    <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Sticky Header -->
+    <!-- Sticky Header (Image 3) -->
     <header class="site-header" role="banner">
       <a href="index.html" class="brand-logo" aria-label="Nushift Home">
         <span class="logo-core-icon" aria-hidden="true">
@@ -65,23 +60,26 @@
           data-theme-toggle
           aria-label="Switch theme"
         ></button>
+        <a href="roles.html" class="btn btn-ghost" style="height: 40px; padding: 0 18px;">
+          Sign in
+        </a>
       </div>
     </header>
 
     <!-- Main Content -->
-    <main id="main-content" style="max-width: var(--container-max); margin: 0 auto; padding: 64px 32px 96px;">
+    <main id="main-content" style="max-width: 1140px; margin: 0 auto; padding: 64px 32px 96px;">
       <section style="text-align: center; margin-bottom: 48px;">
-        <span class="eyebrow" style="display: inline-block; margin-bottom: 12px;">STEP 1 OF 2</span>
-        <h1 class="h1-page" style="margin-bottom: 16px;">Who are you signing in as?</h1>
-        <p class="hero-subtext" style="margin: 0 auto;">Choose your role. Your portal is built around it.</p>
+        <span class="eyebrow" style="display: inline-block; margin-bottom: 12px; color: var(--lk); font-weight: 700; letter-spacing: 0.1em;">STEP 1 OF 2</span>
+        <h1 class="h1-page" style="margin-bottom: 14px; font-size: 46px; font-family: var(--font-heading); font-weight: 700;">Select Your Workspace</h1>
+        <p class="hero-subtext" style="margin: 0 auto; font-size: 18px; color: var(--mu); max-width: 620px;">Choose your role to access the workspace, tools, and information relevant to your responsibilities.</p>
       </section>
 
-      <!-- Roles Grid: 4 cols desktop, 2 cols tablet, 1 col mobile -->
+      <!-- Roles Grid: 4 cols top row, 3 cols bottom row as in Image 3 -->
       <div
         id="roles-grid"
         style="
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
           gap: 20px;
         "
       >
@@ -93,6 +91,6 @@
       <p>© 2026 Nushift. Law, tax and compliance, shifted into one intelligent workspace.</p>
     </footer>
 
-    <script type="module" src="/src/roles.js"></script>
+    <script type="module" src="./src/roles.js"></script>
   </body>
 </html>

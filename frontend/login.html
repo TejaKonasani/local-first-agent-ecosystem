@@ -28,12 +28,7 @@
     <script>
       (function () {
         try {
-          var t = localStorage.getItem('nushift_theme') || localStorage.getItem('lfae_theme');
-          if (t !== 'light' && t !== 'dark') {
-            t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-              ? 'dark'
-              : 'light';
-          }
+          var t = localStorage.getItem('nushift_theme') || localStorage.getItem('meridian_theme') || 'dark';
           document.documentElement.setAttribute('data-theme', t);
         } catch (e) {
           document.documentElement.setAttribute('data-theme', 'dark');
@@ -41,12 +36,12 @@
       })();
     </script>
 
-    <link rel="stylesheet" href="/src/styles.css" />
+    <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Sticky Header -->
+    <!-- Sticky Header (Image 4) -->
     <header class="site-header" role="banner">
       <a href="index.html" class="brand-logo" aria-label="Nushift Home">
         <span class="logo-core-icon" aria-hidden="true">
@@ -62,16 +57,19 @@
           data-theme-toggle
           aria-label="Switch theme"
         ></button>
+        <a href="roles.html" class="btn btn-ghost" style="height: 40px; padding: 0 18px;">
+          Sign in
+        </a>
       </div>
     </header>
 
-    <!-- Main Content: Two Columns Split -->
-    <main id="main-content" style="max-width: 1000px; margin: 0 auto; padding: 64px 32px 96px;">
+    <!-- Main Content: Two Columns Split matching Image 4 -->
+    <main id="main-content" style="max-width: 1080px; margin: 0 auto; padding: 72px 32px 96px;">
       <div
         style="
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-          gap: 48px;
+          gap: 56px;
           align-items: center;
         "
       >
@@ -85,8 +83,14 @@
           <div
             id="login-glass-card"
             class="glass-card card-spotlight"
-            style="padding: 40px; box-shadow: var(--shadow-md);"
+            style="padding: 44px; box-shadow: var(--shadow-md); border-radius: var(--r-20);"
           >
+            <!-- Card Header matching Image 5 bottom-left -->
+            <div style="margin-bottom: 24px;">
+              <h2 id="login-card-title" style="font-size: 22px; font-weight: 600; color: var(--fg); margin-bottom: 6px;">Administrator Login</h2>
+              <p id="login-card-subtitle" style="font-size: 14px; color: var(--mu); margin: 0;">Enter your credentials to continue.</p>
+            </div>
+
             <!-- Error Banner -->
             <div
               id="login-error-banner"
@@ -105,13 +109,13 @@
 
             <form id="login-form" novalidate>
               <!-- Username -->
-              <div class="form-group">
-                <label for="login-username" class="form-label">Username</label>
+              <div class="form-group" style="margin-bottom: 20px;">
+                <label for="login-username" class="form-label" style="font-size: 14px; font-weight: 500; margin-bottom: 8px; color: var(--fg); display: block;">Username</label>
                 <input
                   id="login-username"
                   type="text"
                   class="form-input"
-                  placeholder="Enter your assigned username"
+                  placeholder="Enter username"
                   autocomplete="username"
                   required
                 />
@@ -119,14 +123,14 @@
               </div>
 
               <!-- Password -->
-              <div class="form-group">
-                <label for="login-password" class="form-label">Password</label>
-                <div class="input-wrapper">
+              <div class="form-group" style="margin-bottom: 28px;">
+                <label for="login-password" class="form-label" style="font-size: 14px; font-weight: 500; margin-bottom: 8px; color: var(--fg); display: block;">Password</label>
+                <div class="input-wrapper" style="position: relative;">
                   <input
                     id="login-password"
                     type="password"
                     class="form-input"
-                    placeholder="Enter your password"
+                    placeholder="Enter password"
                     autocomplete="current-password"
                     style="padding-right: 50px;"
                     required
@@ -143,27 +147,21 @@
                 <div id="password-error" class="field-error-msg" style="display: none;"></div>
               </div>
 
-              <!-- Submit Button -->
+              <!-- Submit Button with Gradient and Glow (Image 4) -->
               <button
                 type="submit"
                 id="login-submit-btn"
                 class="btn btn-primary btn-lg"
-                style="width: 100%; margin-top: 8px; margin-bottom: 24px;"
+                style="width: 100%; margin-bottom: 20px; height: 50px; font-size: 15px; font-weight: 600;"
               >
                 <span class="btn-text">Sign in</span>
               </button>
 
-              <!-- Links -->
-              <div style="display: flex; flex-direction: column; gap: 12px; text-align: center; font-size: 14px;">
-                <a href="forgot-password.html" style="color: var(--mu); transition: color 150ms ease;">
+              <!-- Forgot Password Link -->
+              <div style="text-align: center; font-size: 14px;">
+                <a href="forgot-password.html" style="color: var(--lk); text-decoration: none; font-weight: 500;">
                   Forgot your password?
                 </a>
-                <div style="color: var(--mu);">
-                  Need access?
-                  <a href="signup.html" style="color: var(--lk); font-weight: 600; margin-left: 4px;">
-                    Create an account
-                  </a>
-                </div>
               </div>
             </form>
           </div>
@@ -175,6 +173,6 @@
       <p>© 2026 Nushift. Law, tax and compliance, shifted into one intelligent workspace.</p>
     </footer>
 
-    <script type="module" src="/src/login.js"></script>
+    <script type="module" src="./src/login.js"></script>
   </body>
 </html>

@@ -1347,10 +1347,10 @@ p {
 
 .orbit-pill {
   position: absolute;
-  width: 104px;
-  height: 36px;
-  margin-top: -18px;
-  margin-left: -52px;
+  width: 122px;
+  height: 38px;
+  margin-top: -19px;
+  margin-left: -61px;
   border-radius: var(--r-pill);
   background: var(--gl);
   border: 1px solid var(--bd2);
@@ -1367,6 +1367,7 @@ p {
   animation: counterRotate 48s linear infinite;
   transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
   user-select: none;
+  padding: 0 10px;
 }
 
 @keyframes counterRotate {
